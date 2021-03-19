@@ -34,5 +34,5 @@ $ cd python
 # Coloque neste arquivo os itens a serem buscados.
 # Respeitando um item por linha.
 
-#Abra o arquivo "index.py" pela IDLE ou clique duas vezes.
+# Rode o arquivo "index.py" pela IDLE ou clicando duas vezes.
 ```
