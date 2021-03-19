@@ -1,3 +1,6 @@
+#arquivoRaspado não deve ir para la
+*.html
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
