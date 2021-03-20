@@ -1,24 +1,18 @@
-def checkFileExistance(filePath):
-    try:
-        with open(filePath, 'r') as f:
-            return True
-    except FileNotFoundError as e:
-        return False
-    except IOError as e:
-        return False
-
+import funcoes
 import requests
 from bs4 import BeautifulSoup
 
 #user-agent serve para simular como se eu fosse um navegador acessando a pagina
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
-if (checkFileExistance('o_que_buscar.txt') == False):
+if (funcoes.checkFileExistance('o_que_buscar.txt') == False):
     print('O arquivo "o_que_buscar.txt" não existe do diretório deste arquivo python.')
 else:  
     #os itens a serem pesquisados estão neste arquivo..
     arquivo = open('o_que_buscar.txt', 'r')
-
+    arrayEnviarEmail = []
+   
+    
     #para cada linha, ele ira pesquisar alguma coisa
     for linha in arquivo:
         print('Pesquisando na olx como: '+linha)
@@ -69,23 +63,36 @@ else:
                 cepAnuncio          = localizacaoAnuncio[0].text
                 cidadeAnuncio       = localizacaoAnuncio[1].text
                 bairroAnuncio       = localizacaoAnuncio[2].text
+
+                precoAnuncio = precoAnuncio.replace('R$','')
+                try:
+                    precoAnuncio = float(precoAnuncio.replace('.','').replace(',','.'))
+                except:
+                    precoAnuncio = 0
                 
+                if (funcoes.celularInteressante(tituloAnuncio,descricaoAnuncio,precoAnuncio)):
+                    arrayEnviarEmail.append('Titulo: '+tituloAnuncio+'\nLink:'+linkAnuncio)
+                    print('ANÚNCIO INTERESSANTE')                
+                               
     
-                print('Pos...: '+str(contador)+' de '+str(len(listaCelular)))
-                print('Titulo: '+tituloAnuncio)
-                print('Preço.: '+precoAnuncio)
+                print('Pos...: '+str(contador)+' de '+str(len(listaCelular)))                
                 print('Link..: '+linkAnuncio)
+                print('Preço.: '+str(precoAnuncio))                
+                print('Titulo: '+tituloAnuncio)                               
+                print('---------------------------------------')
+                print('Desc..: '+descricaoAnuncio)
                 print('---------------------------------------')
                 print('Imagens do anuncio')
                 for x in imagensAnuncio:
                     print(x.img['src'])
-                print('---------------------------------------')
-                print('Desc..: '+descricaoAnuncio)
                 print('') #pulo uma linha para separar a descrição
-                print(cidadeAnuncio+', '+bairroAnuncio+' - '+cepAnuncio)                
+                print(cidadeAnuncio+', '+bairroAnuncio+' - '+cepAnuncio)
             except: 
               print('ocorreu algum erro')
             print('////////////////////////////////////////////////////////////')
             print('')
-
+        
+        if (len(arrayEnviarEmail) > 0):
+            funcoes.enviarEmail(arrayEnviarEmail)
+    
     arquivo.close()

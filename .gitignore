@@ -1,5 +1,6 @@
 #arquivoRaspado não deve ir para la
 *.html
+python/conf_email.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
