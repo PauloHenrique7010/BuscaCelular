@@ -7,12 +7,12 @@
 
 ### Features
 
-- [x] Pesquisa na OLX ultimos anuncios
+- [x] Pesquisa na OLX últimos anúncios
 - [x] Pesquisa de acordo com a escolha do usuário
-- [x] Opção de escolher um preço de aviso para x produto
-- [x] Envia para e-mail cadastrado os anuncios que atendem aos requisitos.
+- [x] Opção de escolher um preço de aviso para X produto
+- [x] Envia para e-mail cadastrado os anúncios que atendem aos requisitos.
 - [x] Opção de lista negra para não olhar para alguns anúncios.
-- [ ] Opção de trazer apenas os celulares escolhidos 
+- [X] Opção de trazer apenas os celulares escolhidos 
 
 ### A quem se destina
  - Esta aplicação se destina a pessoas que estejam procurando algum aparelho celular na olx e ao invés de ficar toda hora pesquisando para ver se há alguma novidade, poderá recorrer ao programa em tela realizando suas devidas configurações.
@@ -69,6 +69,9 @@ $ cd python
 # 1º Linha: 400,MOTOROLAG3,MOTOG3,G3
 # 2º Linha: 1000,XIAOMINOTE8,XIAOMI8
 # LEMBRETE, NÃO DEVERÁ CONTER ESPAÇOS E OS NOMES PARA REFERÊNCIA DEVERÃO ESTAR EM CAPS LOCK!
+
+# Caso deseje que seja enviado para o e-mail configurado apenas os celulares desejados, crie o 
+# arquivo chamado "apenasCadastrados.inf" na mesma pasta do projeto ".py"
 
 # Rode o arquivo "index.py" pela IDLE ou clicando duas vezes.
 ```
