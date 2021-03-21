@@ -35,7 +35,7 @@ $ git clone <https://github.com/PauloHenrique7010/BuscaCelular>
 # Vá para a pasta python
 $ cd python
 
-# Execute o arquivo "PIP INSTALL.bat"
+# Execute o arquivo "PIP INSTALL.bat" (Aviso, existe um comando para atualizar para a versão mais recente do python)
 
 # Abra o arquivo "o_que_buscar.txt" 
 # Coloque neste arquivo os itens a serem buscados.
