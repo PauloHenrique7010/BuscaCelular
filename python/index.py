@@ -1,6 +1,7 @@
 import funcoes
 import requests
 from bs4 import BeautifulSoup
+print('v1.0 - 21/03/2021 15:50')
 
 #user-agent serve para simular como se eu fosse um navegador acessando a pagina
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
@@ -19,8 +20,8 @@ else:
     archive.close
 
     if (len(arquivo) == 0):
-      arquivo.append('')
-    
+        funcoes.addLog('PESQUISANDO NA CATEGORIA ELETRÔNICOS OS ANÚNCIOS MAIS RECENTES', arrayLog)
+        arquivo.append('')   
    
     
     #para cada linha, ele ira pesquisar alguma coisa
@@ -31,6 +32,7 @@ else:
         if (celularDaVez != ''):
             celularDaVez = 'q='+celularDaVez+'&'
         url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/eletronicos-e-celulares?"+celularDaVez+'sf=1'
+        print(url)
 
         page = requests.get(url,headers=headers)
         #print(page.status_code) 200 para resposta OK
@@ -130,15 +132,15 @@ else:
             funcoes.addLog('',arrayLog)
 
                 
-        if (len(arrayEnviarEmail) > 0):
-            funcoes.enviarEmail(arrayEnviarEmail)
-            funcoes.addLog('||||||||||||| Email enviado! |||||||||||||', arrayLog)
-            funcoes.addLog('SIGA ABAIXO OS CELULARES INTERESSANTES ENVIADOS POR E-MAIL: ', arrayLog)
-            funcoes.addLog('', arrayLog)
-            for x in arrayEnviarEmail:
-                funcoes.addLog(x, arrayLog)            
-        #gero aqui um arquivo de log com os dados raspados
-        stringLog = ''
-        for x in arrayLog:
-            stringLog += x + '\n'
-        funcoes.criarArquivo(stringLog,'log/'+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'.txt')
+    if (len(arrayEnviarEmail) > 0):
+        funcoes.enviarEmail(arrayEnviarEmail)
+        funcoes.addLog('||||||||||||| Email enviado! |||||||||||||', arrayLog)
+        funcoes.addLog('SIGA ABAIXO OS CELULARES INTERESSANTES ENVIADOS POR E-MAIL: ', arrayLog)
+        funcoes.addLog('', arrayLog)
+        for x in arrayEnviarEmail:
+            funcoes.addLog(x, arrayLog)            
+    #gero aqui um arquivo de log com os dados raspados
+    stringLog = ''
+    for x in arrayLog:
+        stringLog += x + '\n'
+    funcoes.criarArquivo(stringLog,'log/'+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'.txt')
