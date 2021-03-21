@@ -149,7 +149,7 @@ def enviarEmail(array):
         # username ou email para logar no servidor
         username = login
         password = senha
-        from_addr = login
+        from_addr = 'BuscaCelular'
         to_addrs = destinatarioCorrigido
 
         # a biblioteca email possuí vários templates

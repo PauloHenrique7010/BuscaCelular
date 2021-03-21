@@ -19,6 +19,15 @@ else:
     arquivo = archive.readlines()
     archive.close
 
+    archive = open('url_enviada.txt', 'r')
+    urlEnviada = archive.readlines()
+    archive.close()
+
+    arrayUrlEnviada = []
+    novasUrls = []
+    for x in urlEnviada:        
+        arrayUrlEnviada.append(x.replace('\n',''))
+    
     if (len(arquivo) == 0):
         funcoes.addLog('PESQUISANDO NA CATEGORIA ELETRÔNICOS OS ANÚNCIOS MAIS RECENTES', arrayLog)
         arquivo.append('')   
@@ -109,11 +118,13 @@ else:
                         funcoes.addLog('Nota...: CELULAR NO BD, MAS ESTÁ CARO')
                     elif (resposta == 4):
                         funcoes.addLog('Nota...: CELULAR NA LISTA NEGRA', arrayLog)
+
                     
-                    if ((resposta == 1) or (resposta == 3)):
-                        arrayEnviarEmail.append(msgResposta)
-                
-                    
+                    if ((resposta == 1) or ((resposta == 3 and (funcoes.checkFileExistance('apenasCadastrados.inf')==False)))):                        
+                        #so cadastra se o anuncio for "novo"
+                        if (linkAnuncio not in arrayUrlEnviada):                            
+                            arrayEnviarEmail.append(msgResposta)
+                            novasUrls.append(linkAnuncio)
                                               
                 funcoes.addLog('Link..: '+linkAnuncio, arrayLog)
                 funcoes.addLog('Preço.: '+str(precoAnuncio), arrayLog)
@@ -144,3 +155,10 @@ else:
     for x in arrayLog:
         stringLog += x + '\n'
     funcoes.criarArquivo(stringLog,'log/'+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'.txt')
+
+    #Adiciono as novas urls enviadas por email para nao haver repetição
+    archive = open('url_enviada.txt', 'a')
+    for x in novasUrls:
+        archive.write(x)
+    archive.close()
+    
