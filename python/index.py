@@ -5,21 +5,32 @@ from bs4 import BeautifulSoup
 #user-agent serve para simular como se eu fosse um navegador acessando a pagina
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
-if (funcoes.checkFileExistance('o_que_buscar.txt') == False):
+if (funcoes.emailConfigurado() == False):
+    print('CONFIGURE E-MAIL PARA PROSSEGUIR!')
+elif (funcoes.checkFileExistance('o_que_buscar.txt') == False):
     print('O arquivo "o_que_buscar.txt" não existe do diretório deste arquivo python.')
 else:  
-    #os itens a serem pesquisados estão neste arquivo..
-    arquivo = open('o_que_buscar.txt', 'r')
+    #os itens a serem pesquisados estão neste arquivo..    
     arrayEnviarEmail = []
     arrayLog = []
+
+    archive = open('o_que_buscar.txt', 'r')
+    arquivo = archive.readlines()
+    archive.close
+
+    if (len(arquivo) == 0):
+      arquivo.append('')
+    
    
     
     #para cada linha, ele ira pesquisar alguma coisa
     for linha in arquivo:
         funcoes.addLog('Pesquisando na olx como: '+linha, arrayLog)
         celularDaVez = linha
-        celularDaVez = celularDaVez.replace(' ', '%20') #na url, é trocado o espaço por "%20"   
-        url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/eletronicos-e-celulares?q="+celularDaVez+'&sf=1'   
+        celularDaVez = celularDaVez.replace(' ', '%20') #na url, é trocado o espaço por "%20"
+        if (celularDaVez != ''):
+            celularDaVez = 'q='+celularDaVez+'&'
+        url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/eletronicos-e-celulares?"+celularDaVez+'sf=1'
 
         page = requests.get(url,headers=headers)
         #print(page.status_code) 200 para resposta OK
@@ -131,5 +142,3 @@ else:
         for x in arrayLog:
             stringLog += x + '\n'
         funcoes.criarArquivo(stringLog,'log/'+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'.txt')
-
-    arquivo.close()

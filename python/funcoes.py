@@ -108,64 +108,71 @@ def celularInteressante(tituloAnuncio, descAnuncio, precoAnuncio):
             break
         else:
             return 3
+def emailConfigurado():
+    nomeArquivo = 'conf_email.txt'   
+    if (checkFileExistance(nomeArquivo) == True):
+        
+        if (arquivoVazio(nomeArquivo)):
+            print('NECESSÁRIO CONFIGURAÇÃO DE E-MAIL:\nESTE PROGRAMA RODA APENAS PARA GMAIL!\n\nSIGA INSTRUÇÕES ABAIXO!\n\n1º Ative o "lesssecureapps" na sua conta google.\n\n1º Linha: E-mail remetente\n2º Linha: Senha remetente\n3º Linha: smtp remetente(smtp.gmail.com)\n4º Linha: porta SSL (465).\n5º linha em diante(um destinatario por linha)')
+            return False
+        else:
+            return True
+    else:        
+        print('Arquivo "conf_email.txt" não encontrado!')
+        return False
+    
 
 def enviarEmail(array):
-    nomeArquivo = 'conf_email.txt'
-    if (checkFileExistance(nomeArquivo) == True):
-        if (arquivoVazio(nomeArquivo)):
-            print('NECESSÁRIO CONFIGURAÇÃO DE E-MAIL:\n1º Linha: email\n2º Linha: senha\n3º linha em diante(um destinatario por linha)')
-        else:
-            archive = open(nomeArquivo, 'r')
-            linhas = archive.readlines()
-            archive.close
-            
-            login = linhas[0]
-            senha = linhas[1]
-            smtpServer = linhas[2].replace('\n','')
-            sslPort    = int(linhas[3].replace('\n',''))
-            
-            destinatario = linhas[4:]
-            destinatarioCorrigido = []
-            for x in destinatario:            
-                destinatarioCorrigido.append(x.replace('\n',''))      
-            
-            import smtplib            
-            from email.mime.text import MIMEText
-
-            # conexão com os servidores do google
-            smtp_ssl_host = smtpServer
-            smtp_ssl_port = sslPort
-            # username ou email para logar no servidor
-            username = login
-            password = senha
-            from_addr = login
-            to_addrs = destinatarioCorrigido
-
-            # a biblioteca email possuí vários templates
-            # para diferentes formatos de mensagem
-            # neste caso usaremos MIMEText para enviar
-            # somente texto
-
-            msgEmail = ""
-            for x in array:
-                msgEmail += x+'\n'                        
-
-            msgEmail = "Encontramos alguns itens que vale apena conferir!\n\n"+msgEmail
+    nomeArquivo = 'conf_email.txt' 
+    if (emailConfigurado):        
+        archive = open(nomeArquivo, 'r')
+        linhas = archive.readlines()
+        archive.close
                 
-            message = MIMEText(msgEmail)
-            message['subject'] = 'BuscaCelular - Encontramos algo!'
-            message['from'] = 'BuscaCelular'
-            message['to'] = ', '.join(to_addrs)
+        login = linhas[0]
+        senha = linhas[1]
+        smtpServer = linhas[2].replace('\n','')
+        sslPort    = int(linhas[3].replace('\n',''))
+            
+        destinatario = linhas[4:]
+        destinatarioCorrigido = []
+        for x in destinatario:            
+            destinatarioCorrigido.append(x.replace('\n',''))      
+            
+        import smtplib            
+        from email.mime.text import MIMEText
+        
+
+        # conexão com os servidores do google
+        smtp_ssl_host = smtpServer
+        smtp_ssl_port = sslPort
+        # username ou email para logar no servidor
+        username = login
+        password = senha
+        from_addr = login
+        to_addrs = destinatarioCorrigido
+
+        # a biblioteca email possuí vários templates
+        # para diferentes formatos de mensagem
+        # neste caso usaremos MIMEText para enviar
+        # somente texto
+
+        msgEmail = ""
+        for x in array:
+            msgEmail += x+'\n'                        
+
+        msgEmail = "Encontramos alguns itens que vale apena conferir!\n\n"+msgEmail
+                
+        message = MIMEText(msgEmail)
+        message['subject'] = 'BuscaCelular - Encontramos algo!'
+        message['from'] = 'BuscaCelular'
+        message['to'] = ', '.join(to_addrs)       
 
             
-            # conectaremos de forma segura usando SSL
-            server = smtplib.SMTP_SSL(smtp_ssl_host, smtp_ssl_port)
-            # para interagir com um servidor externo precisaremos
-            # fazer login nele
-            server.login(username, password)
-            server.sendmail(from_addr, to_addrs, message.as_string())
-            server.quit()
-            
-        
-    else:
-        print('Arquivo "conf_email.txt" não encontrado!')    
+        # conectaremos de forma segura usando SSL
+        server = smtplib.SMTP_SSL(smtp_ssl_host, smtp_ssl_port)
+        # para interagir com um servidor externo precisaremos
+        # fazer login nele
+        server.login(username, password)
+        server.sendmail(from_addr, to_addrs, message.as_string())
+        server.quit()
