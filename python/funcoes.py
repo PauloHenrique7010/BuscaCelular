@@ -1,3 +1,22 @@
+from datetime import datetime, timezone, timedelta
+
+def addLog(frase, arrayLog):
+    print(frase)
+    arrayLog.append(frase)
+    return arrayLog
+
+
+def pegarDataAtual():
+    dataHoraAtual = datetime.now()
+    diferenca = timedelta(hours=-3)    
+    fuso_horario = timezone(diferenca)
+    return dataHoraAtual
+
+def formatarDataParaArquivo(dataNoTipoDate):
+    dataFormatada = dataNoTipoDate.strftime('%d/%m/%Y %H:%M')
+    dataFormatada = dataFormatada.replace('/','.').replace(' ','_').replace(':','.')
+    return dataFormatada
+
 def checkFileExistance(filePath):
     try:
         with open(filePath, 'r') as f:
@@ -21,47 +40,74 @@ def arquivoVazio(filePath):
     else:
         print('[RESPOSTA FUNÇÃO] Arquivo não encontrado!')
         return False
+def criarArquivo(conteudo, diretorio):
+    arquivo = open(diretorio,'w')
+    arquivo.write(conteudo)
+    arquivo.close()
+
+##FIM FUNÇÕES GERAIS
+    
 
 def celularInteressante(tituloAnuncio, descAnuncio, precoAnuncio):
-    precoIdeal = 0
-    motoG7 = ['MOTOROLAG7','MOTOG7']
-    MOTOE7 = ['MOTOROLAE7PLUS','MOTOE7']
     tituloCorrigido = tituloAnuncio.upper().replace(' ','')
+    descCorrigido = descAnuncio.upper().replace(' ','')
+    arrayCelulares = []
     
-    qtdeEncontrado = 0
+    '''arrayCelulares = [
+            [400, 'MOTOROLAG7', 'MOTOG7'],
+            [300, 'SAMSUNGGALAXYJ8','J8'],
+            [450, 'G8PLUS']
+    ]
+    '''    
     
-    #moto g7    
-    if (verSeTem(tituloCorrigido, descAnuncio, motoG7, 400, precoAnuncio)):
-        return True
+    archive = open('bd_aceitar.txt', 'r')
+    for linha in archive:        
+        linha = linha.replace('\n','')
+        arrayLinha = linha.split(',')
+        arrayLinha[0] = float(arrayLinha[0])                                    
+        arrayCelulares.append(arrayLinha)
+    archive.close()
 
-    #moto e7
-    if (verSeTem(tituloCorrigido, descAnuncio, MOTOE7, 2400, precoAnuncio)):
-        return True
+    arrayIgnorar = []
+    archive = open('bd_ignorar.txt','r')    
+    for linha in archive:        
+        linha = linha.replace('\n','')
+        arrayLinha = linha.split(',')        
+        arrayIgnorar.append(arrayLinha)
+    archive.close()
+        
 
-    print('')
-    print('')
-    print('CELULAR NÃO ENCONTRADO NA BASE DE DADOS. ')
-    print('SIGA ABAIXO INFOS DO ANÚNCIO')
-    print('')
-    print('Titulo: '+tituloAnuncio)
-    print('')
-    print('Descrição: \n'+descAnuncio)
-    print(precoAnuncio)
-    return False       
+    ''' TABELA PARA RESPOSTAS '''
+    '''
+        1 - Cadastrado, pode pegar
+        2 - Cadastrado, mas está alto o preço
+        3 - Não cadastrado, MOSTRAR NO EMAIL
+        4 - CELULAR NA LISTA NEGRA..
+    '''
 
-def verSeTem(titulo, descricao, array, precoIdeal, precoAnuncio):
-    OPTem = False
-    qtdeEncontrado = len([s for s in array if s in titulo])   
+    #VERIFICA SE O CELULAR ESTÁ NA LISTA NEGRA.. CASO NÃO QUEIRA QUE BUSQUE POR ESTE MODELO
+    for x in arrayIgnorar:        
+        qtdeEncontrado = len([s for s in x if s in tituloCorrigido])
+        #não coloquei or para achar primeiro no titulo.. (anuncios com tags tb)
+        if (qtdeEncontrado == 0):            
+            qtdeEncontrado = len([s for s in x if s in descCorrigido])            
+        if (qtdeEncontrado > 0):        
+            return 4    
     
-    #não coloquei or por causa de que em alguns anuncios.. os vendedores
-    #colocam outros nomes de aparelhos para aparecer na busca!
-    if (qtdeEncontrado == 0):
-        qtdeEncontrado = len([s for s in array if s in descricao])    
-    if (qtdeEncontrado > 0):        
-        if precoAnuncio <= precoIdeal:            
-            OPTem = True    
-    
-    return OPTem
+
+    for x in arrayCelulares:        
+        qtdeEncontrado = len([s for s in x[1:] if s in tituloCorrigido])
+        #não coloquei or para achar primeiro no titulo.. (anuncios com tags tb)
+        if (qtdeEncontrado == 0):            
+            qtdeEncontrado = len([s for s in x[1:] if s in descCorrigido])            
+        if (qtdeEncontrado > 0):        
+            if precoAnuncio <= x[0]:            
+                return 1
+            else:
+                return 2
+            break
+        else:
+            return 3
 
 def enviarEmail(array):
     nomeArquivo = 'conf_email.txt'
@@ -75,24 +121,25 @@ def enviarEmail(array):
             
             login = linhas[0]
             senha = linhas[1]
+            smtpServer = linhas[2].replace('\n','')
+            sslPort    = int(linhas[3].replace('\n',''))
             
-            destinatario = linhas[2:]
+            destinatario = linhas[4:]
             destinatarioCorrigido = []
-            for x in destinatario:
+            for x in destinatario:            
                 destinatarioCorrigido.append(x.replace('\n',''))      
-
+            
             import smtplib            
             from email.mime.text import MIMEText
 
-            
             # conexão com os servidores do google
-            smtp_ssl_host = 'smtp.gmail.com'
-            smtp_ssl_port = 465
+            smtp_ssl_host = smtpServer
+            smtp_ssl_port = sslPort
             # username ou email para logar no servidor
             username = login
             password = senha
             from_addr = login
-            to_addrs = [destinatarioCorrigido]
+            to_addrs = destinatarioCorrigido
 
             # a biblioteca email possuí vários templates
             # para diferentes formatos de mensagem
@@ -101,16 +148,16 @@ def enviarEmail(array):
 
             msgEmail = ""
             for x in array:
-                msgEmail += x+'\n'
-            print(msgEmail)
+                msgEmail += x+'\n'                        
 
             msgEmail = "Encontramos alguns itens que vale apena conferir!\n\n"+msgEmail
                 
             message = MIMEText(msgEmail)
             message['subject'] = 'BuscaCelular - Encontramos algo!'
-            message['from'] = from_addr
+            message['from'] = 'BuscaCelular'
             message['to'] = ', '.join(to_addrs)
 
+            
             # conectaremos de forma segura usando SSL
             server = smtplib.SMTP_SSL(smtp_ssl_host, smtp_ssl_port)
             # para interagir com um servidor externo precisaremos

@@ -11,11 +11,12 @@ else:
     #os itens a serem pesquisados estão neste arquivo..
     arquivo = open('o_que_buscar.txt', 'r')
     arrayEnviarEmail = []
+    arrayLog = []
    
     
     #para cada linha, ele ira pesquisar alguma coisa
     for linha in arquivo:
-        print('Pesquisando na olx como: '+linha)
+        funcoes.addLog('Pesquisando na olx como: '+linha, arrayLog)
         celularDaVez = linha
         celularDaVez = celularDaVez.replace(' ', '%20') #na url, é trocado o espaço por "%20"   
         url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/eletronicos-e-celulares?q="+celularDaVez+'&sf=1'   
@@ -23,9 +24,7 @@ else:
         page = requests.get(url,headers=headers)
         #print(page.status_code) 200 para resposta OK
         #print(page.text) # consigo ver o codigo fonte da pagina
-        arquivo = open('arquivoRaspado.html','w')
-        arquivo.write(page.text)
-        arquivo.close()       
+        funcoes.criarArquivo(page.text, 'raspados/arquivoRaspado_'+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'.html')        
 
         #converto para um tipo onde posso navegar entre os trechos html
         soup = BeautifulSoup(page.text, 'html.parser')
@@ -36,12 +35,12 @@ else:
         #para cada bloco de anuncio
         contador = 0
         for x in listaCelular:
-            contador += 1
+            contador += 1            
             
             #x = listaCelular[2] caso queira ver uma posição exatamente
             '''faço um try catch para quando o anuncio
                 da olx for um anuncio de publicidade'''
-            print('////////////////////////////////////////////////////////////')
+            funcoes.addLog('////////////////////////////////////////////////////////////', arrayLog)
             try:
                 linkAnuncio = x.a['href']           
         
@@ -51,48 +50,86 @@ else:
 
                 #agora preciso fazer outra raspagem para trazer a descrição do anuncio..
                 pageDescricao       = requests.get(linkAnuncio,headers=headers)
-                soupDescricao       = BeautifulSoup(pageDescricao.text, 'html.parser')
-                
-                imagensAnuncio = soupDescricao.find_all('div', class_='sc-28oze1-5 bQbWAr')
+                soupDescricao       = BeautifulSoup(pageDescricao.text, 'html.parser')                
 
+                    
+                imagensAnuncio = soupDescricao.find_all('div', class_='sc-28oze1-5 bQbWAr')
                 
                 descricaoAnuncio    = soupDescricao.find_all('div', class_='sc-hmzhuo iaXUER sc-jTzLTM iwtnNi')
-                descricaoAnuncio    = descricaoAnuncio[1].span.text
-
-                localizacaoAnuncio  = soupDescricao.find_all('dd', class_='sc-1f2ug0x-1 ljYeKO sc-ifAKCX kaNiaQ')
+                descricaoAnuncio    = descricaoAnuncio[1].span.text                
+                localizacaoAnuncio  = soupDescricao.find_all('dd', class_='sc-1f2ug0x-1 ljYeKO sc-ifAKCX kaNiaQ')                
+                
                 cepAnuncio          = localizacaoAnuncio[0].text
                 cidadeAnuncio       = localizacaoAnuncio[1].text
-                bairroAnuncio       = localizacaoAnuncio[2].text
-
+                bairroAnuncio       = localizacaoAnuncio[2].text               
+                
                 precoAnuncio = precoAnuncio.replace('R$','')
                 try:
                     precoAnuncio = float(precoAnuncio.replace('.','').replace(',','.'))
                 except:
-                    precoAnuncio = 0
+                    precoAnuncio = 0                    
+
                 
-                if (funcoes.celularInteressante(tituloAnuncio,descricaoAnuncio,precoAnuncio)):
-                    arrayEnviarEmail.append('Titulo: '+tituloAnuncio+'\nLink:'+linkAnuncio)
-                    print('ANÚNCIO INTERESSANTE')                
-                               
-    
-                print('Pos...: '+str(contador)+' de '+str(len(listaCelular)))                
-                print('Link..: '+linkAnuncio)
-                print('Preço.: '+str(precoAnuncio))                
-                print('Titulo: '+tituloAnuncio)                               
-                print('---------------------------------------')
-                print('Desc..: '+descricaoAnuncio)
-                print('---------------------------------------')
-                print('Imagens do anuncio')
+                funcoes.addLog('Pos...: '+str(contador)+' de '+str(len(listaCelular)),arrayLog)
+                ''' TABELA PARA RESPOSTAS '''
+                '''
+                    1 - Cadastrado, pode pegar
+                    2 - Cadastrado, mas está alto o preço
+                    3 - Não cadastrado, MOSTRAR NO EMAIL
+                    4 - CELULAR NA LISTA NEGRA..
+
+                '''
+                
+                resposta = funcoes.celularInteressante(tituloAnuncio,descricaoAnuncio,precoAnuncio)
+                
+                
+                if (resposta > 0):                    
+                    msgResposta = 'Titulo: '+tituloAnuncio+'\nLink: '+linkAnuncio                   
+                    
+                    if (resposta == 1):
+                        funcoes.addLog('Nota...: INTERESSANTE',arrayLog)
+                        msgResposta += ' - CADASTRADO E PREÇO BOM\n'
+                    elif (resposta == 3):                        
+                        msgResposta += ' - NÃO CADASTRADO NA BASE DE DADOS\n'                        
+                        funcoes.addLog('Nota...: CELULAR NÃO CADASTRADO NA BASE DE DADOS', arrayLog)
+                    elif (resposta == 2):
+                        funcoes.addLog('Nota...: CELULAR NO BD, MAS ESTÁ CARO')
+                    elif (resposta == 4):
+                        funcoes.addLog('Nota...: CELULAR NA LISTA NEGRA', arrayLog)
+                    
+                    if ((resposta == 1) or (resposta == 3)):
+                        arrayEnviarEmail.append(msgResposta)
+                
+                    
+                                              
+                funcoes.addLog('Link..: '+linkAnuncio, arrayLog)
+                funcoes.addLog('Preço.: '+str(precoAnuncio), arrayLog)
+                funcoes.addLog('Titulo: '+tituloAnuncio, arrayLog)
+                funcoes.addLog('Desc..: '+descricaoAnuncio, arrayLog)
+                funcoes.addLog('-------------------------------------------------', arrayLog)
+                funcoes.addLog('Imagens do anuncio', arrayLog)
                 for x in imagensAnuncio:
-                    print(x.img['src'])
-                print('') #pulo uma linha para separar a descrição
-                print(cidadeAnuncio+', '+bairroAnuncio+' - '+cepAnuncio)
-            except: 
-              print('ocorreu algum erro')
-            print('////////////////////////////////////////////////////////////')
-            print('')
-        
+                    funcoes.addLog(x.img['src'], arrayLog)
+                funcoes.addLog('', arrayLog) #pulo uma linha para separar a descrição
+                funcoes.addLog(cidadeAnuncio+', '+bairroAnuncio+' - '+cepAnuncio, arrayLog)                
+            except Exception as e:
+                funcoes.addLog('Possível Anuncio', arrayLog)
+                
+            funcoes.addLog('////////////////////////////////////////////////////////////', arrayLog)
+            funcoes.addLog('',arrayLog)
+
+                
         if (len(arrayEnviarEmail) > 0):
             funcoes.enviarEmail(arrayEnviarEmail)
-    
+            funcoes.addLog('||||||||||||| Email enviado! |||||||||||||', arrayLog)
+            funcoes.addLog('SIGA ABAIXO OS CELULARES INTERESSANTES ENVIADOS POR E-MAIL: ', arrayLog)
+            funcoes.addLog('', arrayLog)
+            for x in arrayEnviarEmail:
+                funcoes.addLog(x, arrayLog)            
+        #gero aqui um arquivo de log com os dados raspados
+        stringLog = ''
+        for x in arrayLog:
+            stringLog += x + '\n'
+        funcoes.criarArquivo(stringLog,'log/'+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'.txt')
+
     arquivo.close()
