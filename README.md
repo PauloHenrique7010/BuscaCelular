@@ -20,7 +20,9 @@
 ### Pré-requisitos
 
 Antes de começar, é necessário ter em sua máquina:
+<br>
 [Git](https://git-scm.com)
+<br>
 [Python 3.9.2 ou superior](https://www.python.org/). 
 
 ```bash
@@ -40,16 +42,29 @@ $ cd python
 # OBS: Caso não deseja procurar nada, apenas trazer os itens mais recentes da categoria.. deixar arquivo em branco.
 # Crie o arquivo "conf_email.txt" na mesma pasta dos arquivos ".py".
 # Dentro deste arquivo, configure da seguinte forma:
-## 1º Linha: E-mail remetente
+# 1º Linha: E-mail remetente
+# 2º Linha: Senha remetente
+# 3º Linha: Servidor SMTP -> Colocar "smtp.gmail.com"
+# 4º Linha: Porta SSL -> Colocar "465"
+# Da 5º Linha em diante, coloque os destinatários para o envio do e-mail. (um destinatário por linha!)
+
 
 # Caso deseje que não apareça um anúncio como sugestão no seu e-mail, ex:
 # "Quero pesquisar por motorola, mas não quero que o motog1 apareça."
 # Dessa forma, abra o arquivo "bd_ignorar.txt" e em cada linha separe por virgula e sem espaço como o aparelho pode ser reconhecido.
 # Ex:
 # Para ignorar aparelhos como Motorola G1 e Samsung Galaxy J1, colocar
-## 1º Linha: "MOTOG1,MOTOROLAG1" 
-## 2º Linha: "J1,GALAXYJ1,SAMSUNGJ1"
-# <p> LEMBRE-SE, TUDO EM CAIXA ALTA SEM ESPAÇOS E SEPARADO POR VÍRGULA!! </p>
+# 1º Linha: "MOTOG1,MOTOROLAG1" 
+# 2º Linha: "J1,GALAXYJ1,SAMSUNGJ1"
+# LEMBRE-SE, TUDO EM CAIXA ALTA SEM ESPAÇOS E SEPARADO POR VÍRGULA!!
+
+# Para os celulares desejados, altere o arquivo "bd_aceitar.txt" de acordo com o padrão a seguir:
+# Primeira posição o valor máximo que o produto deverá ter para aparecer
+# Segunda posição em diante será como o produto poderá ser reconhecido.
+# Ex:
+1º Linha: 400,MOTOROLAG3,MOTOG3,G3
+2º Linha: 1000,XIAOMINOTE8,XIAOMI8
+# LEMBRETE, NÃO DEVERÁ CONTER ESPAÇOS E OS NOMES PARA REFERÊNCIA DEVERÃO ESTAR EM CAPS LOCK!
 
 # Rode o arquivo "index.py" pela IDLE ou clicando duas vezes.
 ```
