@@ -12,6 +12,7 @@
 - [ ] Opção de escolher um preço de aviso para x produto
 - [ ] Envia para e-mail cadastrado os anuncios que atendem aos requisitos.
 - [ ] Opção de lista negra para não olhar para alguns anúncios.
+- [ ] Opção de trazer apenas os celulares escolhidos 
 
 ### A quem se destina
  - Esta aplicação se destina a pessoas que estejam procurando algum aparelho celular na olx e ao invés de ficar toda hora pesquisando para ver se há alguma novidade, poderá recorrer ao programa em tela realizando suas devidas configurações.
@@ -39,9 +40,11 @@ $ cd python
 # Abra o arquivo "o_que_buscar.txt" 
 # Coloque neste arquivo os itens a serem buscados.
 # Respeitando um item por linha.
-# OBS: Caso não deseja procurar nada, apenas trazer os itens mais recentes da categoria.. deixar arquivo em branco.
+# OBS: Caso não deseja procurar nada, apenas trazer os itens mais recentes da categoria.. 
+  deixar arquivo em branco.
 # Crie o arquivo "conf_email.txt" na mesma pasta dos arquivos ".py".
 # Dentro deste arquivo, configure da seguinte forma:
+
 # 1º Linha: E-mail remetente
 # 2º Linha: Senha remetente
 # 3º Linha: Servidor SMTP -> Colocar "smtp.gmail.com"
@@ -51,7 +54,8 @@ $ cd python
 
 # Caso deseje que não apareça um anúncio como sugestão no seu e-mail, ex:
 # "Quero pesquisar por motorola, mas não quero que o motog1 apareça."
-# Dessa forma, abra o arquivo "bd_ignorar.txt" e em cada linha separe por virgula e sem espaço como o aparelho pode ser reconhecido.
+# Dessa forma, abra o arquivo "bd_ignorar.txt" e em cada linha separe por virgula e sem espaço como o 
+  aparelho pode ser reconhecido.
 # Ex:
 # Para ignorar aparelhos como Motorola G1 e Samsung Galaxy J1, colocar
 # 1º Linha: "MOTOG1,MOTOROLAG1" 
