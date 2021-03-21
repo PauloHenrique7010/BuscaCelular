@@ -97,7 +97,7 @@ else:
                 
                 
                 if (resposta > 0):                    
-                    msgResposta = 'Titulo: '+tituloAnuncio+'\nLink: '+linkAnuncio                   
+                    msgResposta = 'Titulo: '+tituloAnuncio+'\nLink: '+linkAnuncio+'\nPreço: '+str(precoAnuncio)                   
                     
                     if (resposta == 1):
                         funcoes.addLog('Nota...: INTERESSANTE',arrayLog)
