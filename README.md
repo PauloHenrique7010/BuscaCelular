@@ -55,7 +55,7 @@ $ cd python
 # Caso deseje que não apareça um anúncio como sugestão no seu e-mail, ex:
 # "Quero pesquisar por motorola, mas não quero que o motog1 apareça."
 # Dessa forma, abra o arquivo "bd_ignorar.txt" e em cada linha separe por virgula e sem espaço como o 
-  aparelho pode ser reconhecido.
+# aparelho pode ser reconhecido.
 # Ex:
 # Para ignorar aparelhos como Motorola G1 e Samsung Galaxy J1, colocar
 # 1º Linha: "MOTOG1,MOTOROLAG1" 
@@ -66,8 +66,8 @@ $ cd python
 # Primeira posição o valor máximo que o produto deverá ter para aparecer
 # Segunda posição em diante será como o produto poderá ser reconhecido.
 # Ex:
-1º Linha: 400,MOTOROLAG3,MOTOG3,G3
-2º Linha: 1000,XIAOMINOTE8,XIAOMI8
+# 1º Linha: 400,MOTOROLAG3,MOTOG3,G3
+# 2º Linha: 1000,XIAOMINOTE8,XIAOMI8
 # LEMBRETE, NÃO DEVERÁ CONTER ESPAÇOS E OS NOMES PARA REFERÊNCIA DEVERÃO ESTAR EM CAPS LOCK!
 
 # Rode o arquivo "index.py" pela IDLE ou clicando duas vezes.
