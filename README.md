@@ -9,9 +9,9 @@
 
 - [x] Pesquisa na OLX ultimos anuncios
 - [x] Pesquisa de acordo com a escolha do usuário
-- [ ] Opção de escolher um preço de aviso para x produto
-- [ ] Envia para e-mail cadastrado os anuncios que atendem aos requisitos.
-- [ ] Opção de lista negra para não olhar para alguns anúncios.
+- [x] Opção de escolher um preço de aviso para x produto
+- [x] Envia para e-mail cadastrado os anuncios que atendem aos requisitos.
+- [x] Opção de lista negra para não olhar para alguns anúncios.
 - [ ] Opção de trazer apenas os celulares escolhidos 
 
 ### A quem se destina
