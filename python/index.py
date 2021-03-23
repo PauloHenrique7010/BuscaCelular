@@ -40,7 +40,7 @@ else:
         celularDaVez = celularDaVez.replace(' ', '%20') #na url, é trocado o espaço por "%20"
         if (celularDaVez != ''):
             celularDaVez = 'q='+celularDaVez+'&'
-        url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/eletronicos-e-celulares?"+celularDaVez+'sf=1'
+        url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/celulares?"+celularDaVez+'sf=1'
         print(url)
 
         page = requests.get(url,headers=headers)
@@ -144,7 +144,7 @@ else:
 
                 
     if (len(arrayEnviarEmail) > 0):
-        funcoes.enviarEmail(arrayEnviarEmail)
+        funcoes.enviarEmail(arrayEnviarEmail, 'Encontramos algo!!!',"Encontramos alguns itens que vale apena conferir!\n\n")
         funcoes.addLog('||||||||||||| Email enviado! |||||||||||||', arrayLog)
         funcoes.addLog('SIGA ABAIXO OS CELULARES INTERESSANTES ENVIADOS POR E-MAIL: ', arrayLog)
         funcoes.addLog('', arrayLog)
@@ -155,6 +155,7 @@ else:
     for x in arrayLog:
         stringLog += x + '\n'
     funcoes.criarArquivo(stringLog,'log/'+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'.txt')
+    funcoes.enviarEmail(arrayLog, 'Log de execução','Segue abaixo log detalhado da operação realizada em '+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'\n\n')
 
     #Adiciono as novas urls enviadas por email para nao haver repetição
     archive = open('url_enviada.txt', 'a')

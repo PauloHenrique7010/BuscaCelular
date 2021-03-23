@@ -122,7 +122,7 @@ def emailConfigurado():
         return False
     
 
-def enviarEmail(array):
+def enviarEmail(array, assunto = ' - Encontramos Algo!!!', mensagem = ''):
     nomeArquivo = 'conf_email.txt' 
     if (emailConfigurado):        
         archive = open(nomeArquivo, 'r')
@@ -161,10 +161,10 @@ def enviarEmail(array):
         for x in array:
             msgEmail += x+'\n'                        
 
-        msgEmail = "Encontramos alguns itens que vale apena conferir!\n\n"+msgEmail
+        msgEmail = mensagem+msgEmail
                 
         message = MIMEText(msgEmail)
-        message['subject'] = 'BuscaCelular - Encontramos algo!'
+        message['subject'] = 'BuscaCelular - '+assunto
         message['from'] = 'BuscaCelular'
         message['to'] = ', '.join(to_addrs)       
 

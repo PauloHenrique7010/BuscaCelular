@@ -2,6 +2,7 @@
 *.html
 python/conf_email.txt
 python/log
+python/url_enviada.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
