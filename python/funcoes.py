@@ -6,6 +6,8 @@ def pastaExiste(path):
         return True
     else:
         return False
+def subData(dataOriginal, qtdeDias):
+    return dataOriginal - timedelta(days=qtdeDias)
 
 def criarPasta(path):
     if (pastaExiste(path) == False):        

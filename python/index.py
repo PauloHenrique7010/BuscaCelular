@@ -112,11 +112,16 @@ else:
                     infoAnuncio = x.div.find('div', class_ = 'fnmrjs-2 jiSLYe')
                     tituloAnuncio = infoAnuncio.div.find('div', class_ = 'fnmrjs-6 iNpuEh').h2.text
                     precoAnuncio = infoAnuncio.div.find('div', class_ = 'fnmrjs-9 gqfQzY').span.text #puxo o primeiro span (quando desce o preço.. o mais novo vai pro primeiro
-                    horaAnuncio =  infoAnuncio.div.find_all('span', class_='wlwg1t-1 fsgKJO sc-ifAKCX eLPYJb')
-                    print(horaAnuncio[0])
-
-                    break
-
+                    dataAnuncio =  infoAnuncio.div.find_all('span', class_='wlwg1t-1 fsgKJO sc-ifAKCX eLPYJb')
+                    horaAnuncio = dataAnuncio[1].text
+                    dataAnuncio = dataAnuncio[0].text
+                    
+                    if ((dataAnuncio.upper() == 'HOJE') or (dataAnuncio.upper() == 'ONTEM')):                        
+                        dtAnuncio = funcoes.pegarDataAtual()
+                        if (dataAnuncio.upper() == 'ONTEM'):
+                            dtAnuncio = funcoes.subData(dtAnuncio,1)
+                        dataAnuncio = dtAnuncio.strftime("%d/%m/%Y")          
+                    
                     #agora preciso fazer outra raspagem para trazer a descrição do anuncio..
                     pageDescricao       = requests.get(linkAnuncio,headers=headers)
                     soupDescricao       = BeautifulSoup(pageDescricao.text, 'html.parser')                
@@ -175,6 +180,7 @@ else:
                                                   
                     funcoes.addLog('Link..: '+linkAnuncio, arrayLog)
                     funcoes.addLog('Preço.: '+str(precoAnuncio), arrayLog)
+                    funcoes.addLog('Data..: '+dataAnuncio+' '+horaAnuncio, arrayLog)
                     funcoes.addLog('Titulo: '+tituloAnuncio, arrayLog)
                     funcoes.addLog('Desc..: '+descricaoAnuncio, arrayLog)
                     funcoes.addLog('-------------------------------------------------', arrayLog)
