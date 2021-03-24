@@ -1,5 +1,16 @@
 from datetime import datetime, timezone, timedelta
+import os.path
 
+def pastaExiste(path):
+    if os.path.isdir(path): # vemos de este diretorio ja existe
+        return True
+    else:
+        return False
+
+def criarPasta(path):
+    if (pastaExiste(path) == False):        
+      os.mkdir(path)
+    
 def addLog(frase, arrayLog):
     print(frase)
     arrayLog.append(frase)
