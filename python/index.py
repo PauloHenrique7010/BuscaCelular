@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 #user-agent serve para simular como se eu fosse um navegador acessando a pagina
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
-print('v1.0 - 21/03/2021 15:50')
+print('v1.1(Apenas vale-paraiba) - 21/03/2021 15:50')
 
 funcoes.criarPasta('log')
 funcoes.criarPasta('raspados')
