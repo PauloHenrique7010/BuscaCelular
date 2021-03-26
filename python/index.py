@@ -80,7 +80,7 @@ else:
             pesquisa = pesquisa+celularDaVez
             if (pesquisa != ''):
                 pesquisa +='&'
-            url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/celulares?"+pesquisa+'sf=1'
+            url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/vale-do-paraiba/celulares?"+pesquisa+'sf=1'
             funcoes.addLog(url, arrayLog)        
 
             if (linha != ""):
@@ -208,7 +208,7 @@ else:
     for x in arrayLog:
         stringLog += x + '\n'
     funcoes.criarArquivo(stringLog,'log/'+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'.txt')
-    funcoes.enviarEmail(arrayLog, 'Log de execução','Segue abaixo log detalhado da operação realizada em '+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'\n\n')
+    #funcoes.enviarEmail(arrayLog, 'Log de execução','Segue abaixo log detalhado da operação realizada em '+funcoes.formatarDataParaArquivo(funcoes.pegarDataAtual())+'\n\n')
 
     #Adiciono as novas urls enviadas por email para nao haver repetição
     archive = open('url_enviada.txt', 'a')

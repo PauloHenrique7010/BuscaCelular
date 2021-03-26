@@ -74,4 +74,9 @@ $ cd python
 # arquivo chamado "apenasCadastrados.inf" na mesma pasta do projeto ".py"
 
 # Rode o arquivo "index.py" pela IDLE ou clicando duas vezes.
+
+
+# Caso queira coloca-lo de forma automatizada
+# Siga este link para a configuração CORRETA
+# https://cassio-bolba.medium.com/automtizar-script-python-com-windows-scheduler-agendador-de-tarefas-ce642b9eaba
 ```
