@@ -6,9 +6,14 @@ from bs4 import BeautifulSoup
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
 print('v1.1(Apenas vale-paraiba) - 21/03/2021 15:50')
+print('v1.2 (Corrigido - Urls já enviadas sendo enviadas de novo) - 07/04/2021 13:30')
+print('')
+print('')
 
 funcoes.criarPasta('log')
 funcoes.criarPasta('raspados')
+
+#precisa criar arquivo url_enviada.txt antes de começar
 
 
 
@@ -80,7 +85,7 @@ else:
             pesquisa = pesquisa+celularDaVez
             if (pesquisa != ''):
                 pesquisa +='&'
-            url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/vale-do-paraiba/celulares?"+pesquisa+'sf=1'
+            url = "https://sp.olx.com.br/vale-do-paraiba-e-litoral-norte/vale-do-paraiba/eletronicos-e-celulares?"+pesquisa+'sf=1'
             funcoes.addLog(url, arrayLog)        
 
             if (linha != ""):
@@ -213,6 +218,6 @@ else:
     #Adiciono as novas urls enviadas por email para nao haver repetição
     archive = open('url_enviada.txt', 'a')
     for x in novasUrls:
-        archive.write(x)
+        archive.write(x+'\n')
     archive.close()
     
